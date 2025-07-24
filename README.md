@@ -1,47 +1,47 @@
 # 🚀 visit-tracker-api
 
-A lightweight, Dockerized API built with FastAPI that tracks user visits and reports system stats.  
-Ideal for showcasing backend fundamentals: endpoints, concurrency, containerization, and performance.
+Una API ligera y dockerizada construida con FastAPI que rastrea visitas de usuarios y reporta estadísticas del sistema.  
+Ideal para demostrar fundamentos de backend: endpoints, concurrencia, contenedores y rendimiento.
 
 ---
 
-## 📦 Features
+## 📦 Funcionalidades
 
-- `POST /visit`: Increments and returns the number of total visits
-- `GET /stats`: Returns server uptime, visit count, and current time
-- Thread-safe counter using Python's `threading.Lock`
-- Dockerized and exposed on port `8080`
-- Auto-generated Swagger docs (`/docs`)
+- `POST /visit`: Incrementa y devuelve el número total de visitas  
+- `GET /stats`: Devuelve el tiempo activo del servidor, el número de visitas y la hora actual  
+- Contador seguro para múltiples hilos usando `threading.Lock` de Python  
+- Dockerizado y expuesto en el puerto `8080`  
+- Documentación Swagger generada automáticamente (`/docs`)  
 
 ---
 
-## 🛠 How to Run (Docker)
+## 🛠 Cómo ejecutar (Docker)
 
-### Option 1: With Docker Compose
+### Opción 1: Con Docker Compose
 
 ```bash
 docker compose up --build
 ```
 
-### Option 2: Manually with Docker
+### Opción 2: Manualmente con Docker
 
 ```bash
 docker build -t visit-tracker-api .
 docker run -p 8080:8080 visit-tracker-api
 ```
 
-Then open:  
-👉 http://localhost:8080/docs for the Swagger UI
+Luego abre:  
+👉 http://localhost:8080/docs para ver la interfaz de Swagger
 
 ---
 
-## 🔁 API Endpoints
+## 🔁 Endpoints de la API
 
 ### `POST /visit`
 
-Increments and returns the number of visits.
+Incrementa y devuelve el número de visitas.
 
-**Example response:**
+**Ejemplo de respuesta:**
 
 ```json
 {
@@ -53,9 +53,9 @@ Increments and returns the number of visits.
 
 ### `GET /stats`
 
-Returns server statistics including uptime, current time, and total visits.
+Devuelve estadísticas del servidor incluyendo tiempo activo, hora actual y visitas totales.
 
-**Example response:**
+**Ejemplo de respuesta:**
 
 ```json
 {
@@ -67,61 +67,61 @@ Returns server statistics including uptime, current time, and total visits.
 
 ---
 
-## 🧵 Concurrency Strategy
+## 🧵 Estrategia de Concurrencia
 
-This API handles concurrent requests using `threading.Lock`, ensuring that multiple requests to `/visit` do not create race conditions when incrementing the counter.  
-We chose locks over atomic variables or async queues for simplicity and thread safety in a multithreaded server like Uvicorn.
-
----
-
-## 📈 Performance Benchmarks
-
-Stress test executed using Python's `concurrent.futures.ThreadPoolExecutor` to simulate concurrent POST requests to `/visit`.
-
-**Configuration:**
-- Total requests: 1000
-- Concurrent threads: 100
-- Machine: Localhost (Windows, Docker Desktop)
-- API mode: Dockerized FastAPI running on Uvicorn (port 8080)
-
-**Results:**
-
-| Metric                  | Value        |
-|-------------------------|--------------|
-| ✅ Total requests        | 1000         |
-| ✅ Successful responses  | 1000         |
-| ❌ Failed responses      | 0            |
-| ⏱️ Time taken            | 4.40 seconds |
-| ⚡ Avg req/sec (approx)  | ~227.3 req/s |
-
-These results confirm that the API handles concurrent traffic reliably with no data loss and minimal latency, thanks to the thread-safe counter logic.
+Esta API maneja solicitudes concurrentes usando `threading.Lock`, asegurando que múltiples llamadas a `/visit` no generen condiciones de carrera al incrementar el contador.  
+Elegimos locks en lugar de variables atómicas o colas asíncronas por su simplicidad y seguridad en servidores multihilo como Uvicorn.
 
 ---
 
-## 🚀 Production Readiness
+## 📈 Pruebas de Rendimiento
 
-To deploy this API in a production environment:
+Prueba de estrés ejecutada usando `concurrent.futures.ThreadPoolExecutor` de Python para simular solicitudes POST concurrentes a `/visit`.
 
-- Add logging (e.g. `loguru`, `structlog`)
-- Add request validation, exception handling
-- Use a reverse proxy (like Nginx or Traefik)
-- Secure with HTTPS (e.g. Let's Encrypt certs)
-- Optionally persist the counter in Redis or a database
-- Deploy on Render, Railway, AWS EC2, or GCP
+**Configuración:**
+- Solicitudes totales: 1000  
+- Hilos concurrentes: 100  
+- Máquina: Localhost (Windows, Docker Desktop)  
+- Modo de API: FastAPI dockerizado corriendo sobre Uvicorn (puerto 8080)  
+
+**Resultados:**
+
+| Métrica                | Valor         |
+|------------------------|---------------|
+| ✅ Solicitudes totales  | 1000          |
+| ✅ Respuestas exitosas  | 1000          |
+| ❌ Respuestas fallidas  | 0             |
+| ⏱️ Tiempo total         | 4.40 segundos |
+| ⚡ Promedio req/seg     | ~227.3 req/s  |
+
+Estos resultados confirman que la API maneja tráfico concurrente de forma confiable, sin pérdida de datos y con mínima latencia, gracias a la lógica segura del contador.
 
 ---
 
-## 📁 Project Structure
+## 🚀 Preparación para Producción
+
+Para desplegar esta API en un entorno de producción:
+
+- Agregar logs (por ejemplo: `loguru`, `structlog`)  
+- Validación de solicitudes y manejo de errores  
+- Usar un proxy inverso (como Nginx o Traefik)  
+- Asegurar con HTTPS (por ejemplo, certificados de Let's Encrypt)  
+- Opcionalmente, persistir el contador en Redis o una base de datos  
+- Desplegar en Render, Railway, AWS EC2 o GCP  
+
+---
+
+## 📁 Estructura del Proyecto
 
 ```
 visit-tracker-api/
 │
 ├── app/
-│   ├── main.py          # FastAPI app with endpoints
-│   ├── counter.py       # Thread-safe visit counter
-│   └── utils.py         # System stat helpers
+│   ├── main.py          # Aplicación FastAPI con endpoints
+│   ├── counter.py       # Contador de visitas seguro para múltiples hilos
+│   └── utils.py         # Utilidades para estadísticas del sistema
 │
-├── tests/               # Test folder (optional)
+├── tests/               # Carpeta de tests (opcional)
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
@@ -132,8 +132,8 @@ visit-tracker-api/
 
 ---
 
-## 👤 Author
+## 👤 Autor
 
 **David Pedemonte**  
-🧪 Tech stack: FastAPI · Docker · Python 3.11 · Git · REST  
+🧪 Stack tecnológico: FastAPI · Docker · Python 3.11 · Git · REST  
 🔗 GitHub: [@davicin3010](https://github.com/davicin3010)
